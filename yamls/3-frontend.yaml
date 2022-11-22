@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - env:
+        - name: 'VUE_APP_API_URL'
+          value: 'backend'
+        image: mifrontend:v1.0
+        name: frontend
+        ports:
+        - containerPort: 8080
+          name: frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  ports:
+  - name: http1
+    port: 8080
+    targetPort: 8080
+    nodePort: 30808 
+  selector:
+    app: frontend
+  type: NodePort  
